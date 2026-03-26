@@ -1,11 +1,13 @@
 One-command Tor setup with obfs4 bridges and SOCKS5 proxy
 
+I tried hard to make it cross-platform, but tested on arch only (yet)
+
 ```bash
 # Place bridges.age in current directory
 ./install.sh
 ```
 
-This will ask password for encrypted file with bridges, since I do not support spreading bridges openly, because many providers or whoever block them when they are exposed
+This will ask password for encrypted file with bridges. I encrypt them because I do not support spreading bridges openly, since many providers (or whoever) block them the moment they are exposed. Those are obfs4, but I personally recommend using snowflake or webtunnel (will upgrade the utility later)
 
 > Please, contact me for the password at vector-anonymous proton.me
 
@@ -17,11 +19,13 @@ Or crack it lol
 
 * Telegram
 
-Click the link provided after installation, or manually configure:
+The script generates link for TG; you can also manually configure it:
 
     Server: 127.0.0.1
 
-    Port: 9150
+    Port: 9150 
+
+I have changed port to 9150 in case you already run tor from 9050 and forgot about it; but i've also provided tor masking so that similar processes do not conflict 
 
 * Command Line
 
