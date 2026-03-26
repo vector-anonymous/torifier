@@ -5,6 +5,8 @@ One-command Tor setup with obfs4 bridges and SOCKS5 proxy
 ./install.sh
 ```
 
+This will ask password for encrypted file with bridges, since I do not support spreading bridges openly, because many providers or whoever block them when they are exposed
+
 > Please, contact me for the password at vector-anonymous proton.me
 
 Or crack it lol
