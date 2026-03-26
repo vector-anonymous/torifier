@@ -61,6 +61,8 @@ curl --socks5 localhost:9150 https://check.torproject.org/api/ip
 
 ## Kill it
 
+If you don't need it anymore ->
+
 ```
 sudo systemctl stop tor-custom.service
 sudo rm /etc/systemd/system/tor-custom.service
