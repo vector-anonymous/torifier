@@ -5,7 +5,7 @@ One-command Tor setup with obfs4 bridges and SOCKS5 proxy
 ./install.sh
 ```
 
-> Please, contant me for the password
+> Please, contact me for the password at vector-anonymous proton.me
 
 Or crack it lol
 
