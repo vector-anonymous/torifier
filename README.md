@@ -1,5 +1,13 @@
 One-command Tor setup with obfs4 bridges and SOCKS5 proxy
 
+1. git clone
+2. bash install.sh
+    - it will install all the dependencies
+    - then it will create proper torrc and set bridges automatically
+    - then it will generate link you can use to set up tor as a proxy for TG
+  
+You can also use this utility to torify your terminal traffic or even proxify your browser (I use it on Firefox)
+
 I tried hard to make it cross-platform, but tested on arch only (yet)
 
 ```bash
