@@ -87,8 +87,7 @@ Wants=network.target
 Type=simple
 User=$CURRENT_USER
 ExecStart=/usr/bin/tor -f $TORRC_PATH
-Restart=on-failure
-RestartSec=30
+
 StandardOutput=append:$LOG_FILE
 StandardError=append:$LOG_FILE
 
