@@ -17,7 +17,7 @@ I tried hard to make it cross-platform, but tested on arch only (yet)
 
 This will ask password for encrypted file with bridges. I encrypt them because I do not support spreading bridges openly, since many providers (or whoever) block them the moment they are exposed. Those are obfs4, but I personally recommend using snowflake or webtunnel (will upgrade the utility later)
 
-> Please, contact me for the password at vector-anonymous proton.me
+> Please, contact me for the password at vector-anonymous proton.me; you can also add your own bridges 
 
 Or crack it lol
 
