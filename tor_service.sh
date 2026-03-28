@@ -1,19 +1,48 @@
 #!/usr/bin/env bash
 
-# tor_service.sh - Setup systemd service for Tor with progress tracking
+# tor_service.sh - Setup Tor service with progress tracking
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/os_detect.sh"
+OS_TYPE="$os_result"
 
 CONFIG_DIR="${HOME}/.tor-suite"
 TORRC_PATH="${CONFIG_DIR}/torrc"
 LOG_FILE="${CONFIG_DIR}/tor-bootstrap.log"
 CURRENT_USER=$(whoami)
 
+export OS_TYPE
+
+# Find tor executable path
+find_tor_path() {
+    if command -v tor &> /dev/null; then
+        command -v tor
+    elif [ -f "/usr/bin/tor" ]; then
+        echo "/usr/bin/tor"
+    elif [ -f "/usr/local/bin/tor" ]; then
+        echo "/usr/local/bin/tor"
+    else
+        echo ""
+    fi
+}
+
+TOR_PATH=$(find_tor_path)
+
 echo "Detected OS: $OS_TYPE"
 echo "Using torrc: $TORRC_PATH"
+echo "Using tor: $TOR_PATH"
 echo "Running as user: $CURRENT_USER"
 
 # Verify torrc exists
 if [ ! -f "$TORRC_PATH" ]; then
     echo "Error: torrc not found at $TORRC_PATH"
+    exit 1
+fi
+
+# Verify tor exists
+if [ -z "$TOR_PATH" ]; then
+    echo "Error: tor not found in PATH or standard locations"
+    echo "Please ensure tor is installed"
     exit 1
 fi
 
@@ -86,8 +115,9 @@ Wants=network.target
 [Service]
 Type=simple
 User=$CURRENT_USER
-ExecStart=/usr/bin/tor -f $TORRC_PATH
-
+ExecStart=$TOR_PATH -f $TORRC_PATH
+Restart=on-failure
+RestartSec=30
 StandardOutput=append:$LOG_FILE
 StandardError=append:$LOG_FILE
 
@@ -138,11 +168,11 @@ EOF
 else
     echo "Systemd not available for $OS_TYPE"
     echo "Run Tor manually:"
-    echo "  tor -f $TORRC_PATH"
+    echo "  $TOR_PATH -f $TORRC_PATH"
     
     cat > "${CONFIG_DIR}/start_tor.sh" << EOF
 #!/bin/bash
-tor -f $TORRC_PATH
+$TOR_PATH -f $TORRC_PATH
 EOF
     chmod +x "${CONFIG_DIR}/start_tor.sh"
     echo ""
