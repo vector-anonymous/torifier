@@ -4,6 +4,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/os_detect.sh"
+OS_TYPE="$os_result"
 
 CONFIG_DIR="${HOME}/.tor-suite"
 TORRC_PATH="${CONFIG_DIR}/torrc"
@@ -20,27 +21,42 @@ else
     exit 1
 fi
 
-# Get obfs4 path based on OS
+# Find obfs4proxy path
+find_obfs4_path() {
+    if command -v obfs4proxy &> /dev/null; then
+        command -v obfs4proxy
+    elif [ -f "/usr/bin/obfs4proxy" ]; then
+        echo "/usr/bin/obfs4proxy"
+    elif [ -f "/usr/local/bin/obfs4proxy" ]; then
+        echo "/usr/local/bin/obfs4proxy"
+    else
+        echo ""
+    fi
+}
+
+OBFS4_PATH=$(find_obfs4_path)
+
+if [ -z "$OBFS4_PATH" ]; then
+    echo "Warning: obfs4proxy not found. Tor will run without obfs4 support."
+fi
+
+# Get obfs4 path based on OS (fallback)
 get_obfs4_path() {
-    case "$OS_TYPE" in
-        arch|debian|fedora|rhel)
-            if command -v obfs4proxy &> /dev/null; then
-                command -v obfs4proxy
-            else
+    if [ -n "$OBFS4_PATH" ]; then
+        echo "$OBFS4_PATH"
+    else
+        case "$OS_TYPE" in
+            arch|debian|fedora|rhel)
                 echo "/usr/bin/obfs4proxy"
-            fi
-            ;;
-        macos)
-            if command -v obfs4proxy &> /dev/null; then
-                command -v obfs4proxy
-            else
+                ;;
+            macos)
                 echo "/usr/local/bin/obfs4proxy"
-            fi
-            ;;
-        *)
-            echo "/usr/bin/obfs4proxy"
-            ;;
-    esac
+                ;;
+            *)
+                echo "/usr/bin/obfs4proxy"
+                ;;
+        esac
+    fi
 }
 
 # Decode bridges
